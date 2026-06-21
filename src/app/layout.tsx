@@ -1,23 +1,31 @@
-import type { Metadata } from "next";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
+import Header from "../../components/Header";         // 🛠️ Fixed path
+import Footer from "../../components/Footer";         // 🛠️ Fixed path
+import { getDynamicBranding } from "../../lib/wordpress"; // 🛠️ Fixed path
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "Headless WordPress App",
-  description: "Next.js + WordPress Headless Framework",
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const branding = await getDynamicBranding();
+
   return (
     <html lang="en">
-      <body className="flex flex-col min-h-screen bg-gray-50 text-gray-900 antialiased">
-        <Header />
-        <main className="flex-grow">{children}</main>
+      <head>
+        <style>{`
+          :root {
+            --color-primary: ${branding.primaryColor};
+            --color-secondary: ${branding.secondaryColor};
+            --color-tertiary: ${branding.tertiaryColor};
+            --color-text: ${branding.textColor};
+            --color-bg-alt: ${branding.alternateColor};
+          }
+        `}</style>
+      </head>
+      <body className="flex flex-col min-h-screen" style={{ color: 'var(--color-text)' }}>
+        <Header logo={branding.logo} />
+        <main className="flex-grow bg-[var(--color-bg-alt)]">{children}</main>
         <Footer />
       </body>
     </html>

@@ -69,3 +69,35 @@ export async function getMenu(location: 'HEADER_MENU' | 'FOOTER_MENU') {
   
   return data?.menuItems?.nodes || [];
 }
+
+export async function getDynamicBranding() {
+  const data = await fetchFromWordPress(`
+    query GetActiveBranding {
+      brandings(first: 1) {
+        nodes {
+          featuredImage {
+            node {
+              sourceUrl
+            }
+          }
+          primary_color
+          secondary_color
+          tertiary_color
+          text_color
+          alternate_color
+        }
+      }
+    }
+  `);
+
+  const active = data?.brandings?.nodes?.[0];
+
+  return {
+    logo: active?.featuredImage?.node?.sourceUrl || null,
+    primaryColor: active?.primary_color || '#2563eb',
+    secondaryColor: active?.secondary_color || '#16a34a',
+    tertiaryColor: active?.tertiary_color || '#dc2626',
+    textColor: active?.text_color || '#1f2937',
+    alternateColor: active?.alternate_color || '#f3f4f6'
+  };
+}
