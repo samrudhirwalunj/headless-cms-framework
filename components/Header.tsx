@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getMenu } from '../lib/wordpress';
+import { getMenu } from '../lib/wordpress'; // Updated to direct relative path
 
 interface MenuItem {
   id: string;
