@@ -1,6 +1,6 @@
-import Header from "../../components/Header";         // 🛠️ Fixed path
-import Footer from "../../components/Footer";         // 🛠️ Fixed path
-import { getDynamicBranding } from "../../lib/wordpress"; // 🛠️ Fixed path
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import { getDynamicBranding } from "../../lib/wordpress";
 import "./globals.css";
 
 export default async function RootLayout({
@@ -13,6 +13,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Inject the live customizer values straight into CSS property definitions */}
         <style>{`
           :root {
             --color-primary: ${branding.primaryColor};
@@ -23,9 +24,14 @@ export default async function RootLayout({
           }
         `}</style>
       </head>
-      <body className="flex flex-col min-h-screen" style={{ color: 'var(--color-text)' }}>
+      <body 
+        className="flex flex-col min-h-screen transition-colors duration-300" 
+        style={{ color: 'var(--color-text)' }}
+      >
         <Header logo={branding.logo} />
-        <main className="flex-grow bg-[var(--color-bg-alt)]">{children}</main>
+        <main className="flex-grow bg-[var(--color-bg-alt)]">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

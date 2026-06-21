@@ -1,26 +1,16 @@
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
-async function fetchFromWordPress(query: string, variables: any = {}) {
-  if (!API_URL) {
-    throw new Error("WordPress API URL is missing in .env.local");
-  }
+async function fetchFromWordPress(query: string, variables = {}) {
+  const res = await fetch('https://lawngreen-rail-937797.hostingersite.com/graphql', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, variables }),
+    // 🛠️ FIX CACHE: This forces Next.js to pull fresh data on every page refresh
+    cache: 'no-store' 
+  });
 
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, variables }),
-      next: { revalidate: 60 }, 
-    });
-
-    if (!res.ok) return null;
-
-    const json = await res.json();
-    return json.data;
-  } catch (error) {
-    console.error("WordPress Connection Error:", error);
-    return null;
-  }
+  const json = await res.json();
+  return json.data;
 }
 
 export async function getWordPressPosts() {
@@ -70,34 +60,59 @@ export async function getMenu(location: 'HEADER_MENU' | 'FOOTER_MENU') {
   return data?.menuItems?.nodes || [];
 }
 
+
 export async function getDynamicBranding() {
   const data = await fetchFromWordPress(`
-    query GetActiveBranding {
-      brandings(first: 1) {
-        nodes {
-          featuredImage {
-            node {
-              sourceUrl
-            }
-          }
-          primary_color
-          secondary_color
-          tertiary_color
-          text_color
-          alternate_color
-        }
+    query GetCustomizerStyles {
+      appearanceCustomizerSettings {
+        siteLogo
+        primaryColor
+        secondaryColor
+        tertiaryColor
+        textColor
+        alternateColor
       }
     }
   `);
 
-  const active = data?.brandings?.nodes?.[0];
+  const active = data?.appearanceCustomizerSettings;
 
+  // Fallback defaults match the theme customizer pickers
   return {
-    logo: active?.featuredImage?.node?.sourceUrl || null,
-    primaryColor: active?.primary_color || '#2563eb',
-    secondaryColor: active?.secondary_color || '#16a34a',
-    tertiaryColor: active?.tertiary_color || '#dc2626',
-    textColor: active?.text_color || '#1f2937',
+    logo: active?.siteLogo || null,
+    primaryColor: active?.primaryColor || '#2563eb',
+    secondaryColor: active?.secondaryColor || '#16a34a',
+    tertiaryColor: active?.tertiaryColor || '#dc2626',
+    textColor: active?.textColor || '#1f2937',
     alternateColor: active?.alternate_color || '#f3f4f6'
   };
 }
+
+export async function getHomepageData() {
+  const data = await fetchFromWordPress(`
+    query GetTargetHomepage {
+      homepageSettings {
+        frontPageId
+        frontPageSlug
+      }
+    }
+  `);
+
+  const slug = data?.homepageSettings?.frontPageSlug;
+
+  // If no static page is selected in WP, fallback or return null
+  if (!slug) return null;
+
+  // Now pull the content for that specific resolved page slug
+  const pageData = await fetchFromWordPress(`
+    query GetPageContent($slug: ID!) {
+      page(id: $slug, idType: URI) {
+        title
+        content
+      }
+    }
+  `, { slug: `/${slug}/` });
+
+  return pageData?.page || null;
+}
+
