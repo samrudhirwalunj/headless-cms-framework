@@ -1,0 +1,41 @@
+[33mcommit c8af48007d079f182c396816d7ee9ebbaa8bf8cd[m
+Author: samrudhirwalunj <samrudhirwalunj@gmail.com>
+Date:   Sun Jun 21 11:17:21 2026 +0530
+
+    Initial commit from Create Next App
+
+[33mcommit baef16911bb0b9972fe1738f22dc454374999b3b[m
+Author: samrudhirwalunj <samrudhirwalunj@gmail.com>
+Date:   Sun Jun 21 11:22:50 2026 +0530
+
+    Initial commit with headless WordPress
+
+[33mcommit 63e6619b3d08c1c9a759a529f012be9241d3b4d4[m
+Author: samrudhirwalunj <samrudhirwalunj@gmail.com>
+Date:   Sun Jun 21 13:09:28 2026 +0530
+
+    Code headless update
+
+[33mcommit a27ec4a372cbb894e66ca105f7c11787361413f4[m
+Author: samrudhirwalunj <samrudhirwalunj@gmail.com>
+Date:   Sun Jun 21 13:17:46 2026 +0530
+
+    Fix-typescript missing
+
+[33mcommit 9102773fe3d7a7b7cc0c0528c2a27c78bf6a942a[m
+Author: samrudhirwalunj <samrudhirwalunj@gmail.com>
+Date:   Sun Jun 21 13:20:56 2026 +0530
+
+    Fix-portfolio
+
+[33mcommit 31cd230960ee1cb50336c21d3bb03de8debed15c[m
+Author: samrudhirwalunj <samrudhirwalunj@gmail.com>
+Date:   Sun Jun 21 13:23:16 2026 +0530
+
+    Fix-api
+
+[33mcommit fab80fd5b3c9b8454fd9e6286b9ef66002d34679[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: samrudhirwalunj <samrudhirwalunj@gmail.com>
+Date:   Sun Jun 21 13:55:22 2026 +0530
+
+    Fix-wordpress fetching
